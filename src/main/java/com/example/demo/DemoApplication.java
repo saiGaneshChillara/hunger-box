@@ -19,9 +19,17 @@ public class DemoApplication {
 
   @RestController
   class HelloworldController {
-    @GetMapping("/")
+    @GetMapping("/api/secure/users/hello-test")
     String hello() {
       return "Hello " + name + "!";
+    }
+  }
+
+  @RestController
+  class VendorTestController {
+    @GetMapping("/api/secure/vendors/hello-test")
+    String hello() {
+      return "Hello world vendor";
     }
   }
 
