@@ -1,5 +1,8 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,4 +21,9 @@ public class Building {
     private String name;
     private int floor;
     private String address;
+    private List<String> counters = new ArrayList<>();
+
+    public void addCounter(String counterId) {
+        this.counters.add(counterId);
+    }
 }
