@@ -27,9 +27,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        System.out.println("JwtAuthFilter");
+        String requestPath = request.getRequestURI();
+        if (requestPath.startsWith("/ai/users/") || requestPath.startsWith("/api/vendors") || requestPath.equals("/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         String authHeader = request.getHeader("Authorization");
-        System.out.println("Auth header is " + authHeader);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -39,12 +42,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String email = jwtUtil.extractEmail(token);
         String role = jwtUtil.extractRole(token);
 
-        System.out.println("token is " + token);
-        System.out.println("Email is " + email);
-        System.out.println("Role is " + role);
 
         if (email != null && jwtUtil.validateToken(token, email) && ("USER".equals(role) || "VENDOR".equals(role))) {
-            System.out.println("Valid token and role is " + role);
             List<SimpleGrantedAuthority> authorities = Collections.singletonList(
                 new SimpleGrantedAuthority("ROLE_" + role)
             );
@@ -58,6 +57,5 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-        System.out.println("Completed JwtAuthFilter");
     }
 }

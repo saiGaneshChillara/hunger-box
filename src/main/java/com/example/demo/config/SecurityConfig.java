@@ -27,6 +27,7 @@ public class SecurityConfig {
             .requestMatchers("/").permitAll()
             .requestMatchers("/api/users/**").permitAll()
             .requestMatchers("/api/vendors/**").permitAll()
+            .requestMatchers("/api/buildings/**").permitAll()
             .requestMatchers("/api/secure/users/**").hasRole("USER")
             .requestMatchers("/api/secure/vendors/**").hasRole("VENDOR")
             .anyRequest().authenticated()

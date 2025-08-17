@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,15 @@ public class VendorService {
 
         String token = jwtUtil.generateToken(vendor.getEmail(), vendor.getRole());
         return mapToResponse(vendor, token);
+    }
+
+    public Optional<String> getVendorIdByEmail(String email) {
+        Optional<Vendor> vendor = vendorRepository.findByEmail(email);
+        if (vendor.isPresent()) {
+            return Optional.of(vendor.get().getId());
+        }
+
+        return Optional.empty();
     }
 
     private AuthResponse mapToResponse(Vendor vendor, String token) {
